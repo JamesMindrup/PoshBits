@@ -1,5 +1,5 @@
 $VerbosePreference = "SilentlyContinue"
-function Get-AllActiveCompAD {
+function GetAllActiveCompAD {
     Param (
         $VerbosePreference = "SilentlyContinue", 
         $domain, 
