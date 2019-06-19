@@ -9,32 +9,13 @@ function ReplaceStringInFile {
         $VerbosePreference = "SilentlyContinue"
     )
     
-    $connError = $false
     Write-host "live: $($liverun)"
     $creds = Get-Credential
-    # Connect to Computer remotely unless we are running on the target computer
-    if ($env:COMPUTERNAME -ne $ComputerName) {
-        Write-Verbose "Attempting to create remote session: $($computername)"
-        Test-WsMan $computerName | Out-Null
-        if ($?) {
-            Write-Verbose "Connection test to $($computername) succeeded"
-            $RemoteSession = New-PSSession -Credential $creds -ComputerName $ComputerName
-            Enter-PSSession $RemoteSession
-        }
-        else {
-            Write-Verbose "Connection to $($computername) failed!"
-            $connError = $true
-        }
-        #Invoke-Command -Computername $ComputerName -ScriptBlock $ScriptBlock -ArgumentList $fileFullPath,$TextToReplace,$ReplacementText #(Get-Content $fileFullPath)}.replace($TextToReplace, $ReplacementText) | Set-Content $fileFullPath}
-    }
-    else {Write-Verbose "Running local: $($computername)"}
     
-    if ($connError) {Write-Verbose "Connection Error, aborting."}
-    else {
+    $ScriptBlock = {
         Write-Host "Path: $($fileFullPath)"
         Write-Host "To Replace: $($TextToReplace)"
         Write-Host "Replace With: $($ReplacementText)"
-        Get-ChildItem "D:"
         if (Test-Path $fileFullPath) {
 
             # Backup the file
@@ -67,8 +48,15 @@ function ReplaceStringInFile {
         }
         else {Write-Verbose "Target file not found!"}
     }
-    if ($env:COMPUTERNAME -ne $ComputerName) {
-        Write-Verbose "Removing remote session: $($computername)"
-        Remove-PSSession $RemoteSession
+
+    # Connect to Computer remotely
+    Write-Verbose "Testing remote connection: $($computername)"
+    Test-WsMan $computerName | Out-Null
+    if ($?) {
+        Write-Verbose "Connection test to $($computername) succeeded. sending commands"
+        Invoke-Command -Computername $ComputerName -Credential $creds -ScriptBlock $ScriptBlock -ArgumentList $fileFullPath,$TextToReplace,$ReplacementText
+    }
+    else {
+        Write-Verbose "Connection to $($computername) failed!"
     }
 }
