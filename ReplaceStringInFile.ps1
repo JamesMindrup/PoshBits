@@ -49,9 +49,12 @@ function ReplaceStringInFile {
             if ($LiveRun) {Copy-Item -Path $fileFullPath -Destination $fileBackupFullPath}
             else {Write-Verbose "!!!Test run, no backup made!!!"}
             Start-Sleep -Seconds 1
-            if (!(Test-Path $fileBackupFullPath)) {$ResultObject.BackupFileCreated = "Create $($fileBackupFullPath) failed!"}
+            if ((!(Test-Path $fileBackupFullPath))-and($LiveRun)) {
+                Write-Verbose "file backup failed!"
+                $ResultObject.BackupFileCreated = "Create $($fileBackupFullPath) failed!"
+            }
             else {
-                $ResultObject.BackupFileCreated = $fileBackupFullPath
+                if ($LiveRun) {$ResultObject.BackupFileCreated = $fileBackupFullPath}
                 # Check for the target string to be replaced
                 $TargetStringMatches = Select-String -Path $fileFullPath -Pattern $TextToReplace
                 # need logic to handle multiple results
