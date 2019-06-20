@@ -67,5 +67,5 @@ function ReplaceStringInFile {
         Write-Verbose "Connection to $($computername) failed!"
     }
 
-    Return $ResultObject
+    
 }
