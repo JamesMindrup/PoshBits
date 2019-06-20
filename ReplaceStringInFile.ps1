@@ -13,9 +13,18 @@ function ReplaceStringInFile {
     $creds = Get-Credential
     
     $ScriptBlock = {
+        param (
+            $fileFullPath,
+            $TextToReplace,
+            $ReplacementText,
+            $LiveRun,
+            $VerbosePreference = "SilentlyContinue"
+        )
         Write-Host "Path: $($fileFullPath)"
         Write-Host "To Replace: $($TextToReplace)"
         Write-Host "Replace With: $($ReplacementText)"
+        Write-Host "Live: $($LiveRun)"
+
         if (Test-Path $fileFullPath) {
 
             # Backup the file
@@ -54,7 +63,8 @@ function ReplaceStringInFile {
     Test-WsMan $computerName | Out-Null
     if ($?) {
         Write-Verbose "Connection test to $($computername) succeeded. sending commands"
-        Invoke-Command -Computername $ComputerName -Credential $creds -ScriptBlock $ScriptBlock -ArgumentList $fileFullPath,$TextToReplace,$ReplacementText
+        Invoke-Command -Computername $ComputerName -Credential $creds -ScriptBlock $ScriptBlock `
+          -ArgumentList $fileFullPath,$TextToReplace,$ReplacementText,$LiveRun,$VerbosePreference
     }
     else {
         Write-Verbose "Connection to $($computername) failed!"
