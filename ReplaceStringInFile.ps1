@@ -5,13 +5,11 @@ function ReplaceStringInFile {
         $ComputerName,
         $TextToReplace,
         $ReplacementText,
+        $creds,
         [switch]$LiveRun,
         $VerbosePreference = "SilentlyContinue"
     )
-    
-    Write-host "live: $($liverun)"
-    $creds = Get-Credential
-    
+        
     $ScriptBlock = {
         param (
             $fileFullPath,
@@ -20,13 +18,12 @@ function ReplaceStringInFile {
             $LiveRun,
             $VerbosePreference = "SilentlyContinue"
         )
-        Write-Host "Path: $($fileFullPath)"
-        Write-Host "To Replace: $($TextToReplace)"
-        Write-Host "Replace With: $($ReplacementText)"
-        Write-Host "Live: $($LiveRun)"
+        Write-Verbose "Path: $($fileFullPath)"
+        Write-Verbose "To Replace: $($TextToReplace)"
+        Write-Verbose "Replace With: $($ReplacementText)"
+        Write-Verbose "Live: $($LiveRun)"
 
         if (Test-Path $fileFullPath) {
-
             # Backup the file
             $fileBackupFullPath = ""
             $i = 0
@@ -69,4 +66,6 @@ function ReplaceStringInFile {
     else {
         Write-Verbose "Connection to $($computername) failed!"
     }
+
+    Return $ResultObject
 }
