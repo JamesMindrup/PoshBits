@@ -25,10 +25,10 @@ function ReplaceStringInFile {
 
         $ResultObject = New-Object System.Object
         $ResultObject | Add-Member -type NoteProperty -Name Machine -Value $env:COMPUTERNAME
-        $ResultObject | Add-Member -type NoteProperty -Name LiveRun -Value $LiveRun
         $ResultObject | Add-Member -type NoteProperty -Name FilePath -Value $fileFullPath
         $ResultObject | Add-Member -type NoteProperty -Name TextToReplace -Value $TextToReplace
         $ResultObject | Add-Member -type NoteProperty -Name ReplacementText -Value $ReplacementText
+        $ResultObject | Add-Member -type NoteProperty -Name LiveRun -Value $LiveRun
         $ResultObject | Add-Member -type NoteProperty -Name FileFound -Value $false
         $ResultObject | Add-Member -type NoteProperty -Name TextToReplaceFound -Value $false
         $ResultObject | Add-Member -type NoteProperty -Name ReplaceVerified -Value $false
