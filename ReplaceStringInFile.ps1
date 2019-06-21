@@ -47,7 +47,7 @@ function ReplaceStringInFile {
                 $i++
             } until ($fileBackupFullPath)
             if ($LiveRun) {Copy-Item -Path $fileFullPath -Destination $fileBackupFullPath}
-            else {Write-Verbose "!!!Test run, no backup made!!!"}
+            else {Write-Verbose "!!!Test run, no backup made(would have been '$($fileBackupFullPath)')!!!"}
             Start-Sleep -Seconds 1
             if ((!(Test-Path $fileBackupFullPath))-and($LiveRun)) {
                 Write-Verbose "file backup failed!"
