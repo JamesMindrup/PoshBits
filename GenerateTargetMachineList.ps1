@@ -9,7 +9,7 @@ function GetAllActiveCompAD {
     # Ref: https://gallery.technet.microsoft.com/scriptcenter/Get-Inactive-Computer-in-54feafde
     $time = (Get-Date).Adddays(-($DaysInactive)) 
     $pdce = (Get-ADDomain -identity $domain -Credential $creds).PDCEmulator
-    # Get all AD server computers with lastLogonTimestamp greater than our time 
+    # Get all AD server computers with lastLogonTimestamp greater than our time !!NOT DCs!!
     $computers = Get-ADComputer -Filter {(LastLogonTimeStamp -gt $time)-and(operatingsystem -like "*Server*")-and(trustedfordelegation -eq "false")} -server $pdce -Properties DNSHostName,LastLogonTimeStamp
     Write-Verbose "found $($Computers.Count) computers"
     foreach ($computer in $computers) {
