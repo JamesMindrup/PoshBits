@@ -3,7 +3,8 @@ function GetAllActiveCompAD {
     Param (
         $VerbosePreference = "SilentlyContinue", 
         $domain, 
-        $DaysInactive=90, 
+        $DaysInactive = 90, 
+        $ReportFolder = "C:\temp",
         $creds
     )
     # Ref: https://gallery.technet.microsoft.com/scriptcenter/Get-Inactive-Computer-in-54feafde
